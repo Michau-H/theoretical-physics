@@ -1,10 +1,9 @@
+# *all projects are currently either in progress or not started yet*.  
+
 # Numerical Methods with RK4 (C++)
 
 This repository contains numerical simulations solved using the **Runge-Kutta 4th Order (RK4)** method in **C++**, covering various physical systems.
 
----
-
-# *all projects are currently either in progress or not started yet*.  
 
 ---
 
