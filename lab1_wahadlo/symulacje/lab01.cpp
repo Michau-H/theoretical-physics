@@ -65,22 +65,22 @@ void pochodne ( double t , double *s , double * k ){
 void rk4_vec ( double t , double dt , int n , double *s ,
     void (* f )( double , double * , double *) ){
     # define M 2
-    static double k1 [ M ] , k2 [ M ] , k3 [ M ] , k4 [ M ] , w [ M ];
+    static double k1[M], k2 [M], k3[M], k4[M], w[M];
     int i ;
     for(i=0; i<n; i++)
-        w [ i ]= s [ i ];
+        w[i] = s[i];
     f (t ,w , k1 );
     for(i=0; i<n; i++) 
-        w [ i ]= s [ i ]+ dt /2* k1 [ i ];
-    f ( t + dt /2 , w , k2 );
+        w[i]= s[i]+ dt/2 * k1[i];
+    f (t + dt/2, w, k2);
     for(i=0; i<n; i++) 
-        w [ i ]= s [ i ]+ dt /2* k2 [ i ];
-    f ( t + dt /2 , w , k3 );
+        w[i] = s[i] + dt/2 * k2[i];
+    f (t + dt/2, w, k3);
     for(i=0; i<n; i++) 
-        w [ i ]= s [ i ]+ dt * k3 [ i ];
-    f ( t + dt ,w , k4 );
+        w [i] = s[i] + dt * k3[i];
+    f (t + dt, w, k4);
     for(i=0; i<n; i++) 
-        s [ i ]= s [ i ]+ dt /6*( k1 [ i ]+2* k2 [ i ]+2* k3 [ i ]+ k4 [ i ]);
+        s[i] = s[i] + dt/6 * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
 
 }
 

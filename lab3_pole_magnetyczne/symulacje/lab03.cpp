@@ -4,9 +4,9 @@
 #include <string>
 #include <iomanip>
 
-# define g 9.81
+# define q 1.0
 # define m 1.0
-# define alfa 0.5
+# define B 1.0
 
 
 void pochodne(double, double*, double*);
@@ -19,7 +19,7 @@ void rk4_vec(double, double, int, double *,
 void zapisz(double, double *, std::ofstream * out);
 
 int main (){
-    double war[2][4]={{1.1,1.0,0.0}, {M_PI/0.99,10,0,0}};
+    double war[2][4]={{1.1,1.0,0.0}, {M_PI/99,10,0,0}};
     double dt[2]={0.1,0.01};
     double * s ;
     int n =4;
@@ -60,42 +60,43 @@ int main (){
 
 void pochodne ( double t , double *s , double * k ){
 
-    k [0]= s[2];
-    k [1]= s[3];
-    k [2]= -g*(pow(cos(alfa),2)*sin(s[0]))/(sin(alfa)*s[1])-2*s[2]*s[3]/s[1];
-    k [3]= pow(sin(alfa)*s[2],2)*s[1] - g*sin(alfa)*pow(cos(alfa),2)*(1-cos(s[0]));
+    k [0]= s[3]/m;
+    k [1]= s[4]/(m*pow(s[0],2)) - q*B/(2*m);
+    k [2]= s[5]/m;
+    k [3]= pow(s[4],2)/(m*s[3])-pow(q*B,2)*s[0]/(4*m);
+    k [4]= 0;
+    k [5]= 0;
     return ;
     }
 
-double E(double *s){
-    return 0.5*(pow(tan(alfa)*s[1]*s[2], 2) + pow(s[3]/cos(alfa),2)) + g*s[1]*sin(alfa)*(1-cos(s[0]));
-}
+// double E(double *s){
+//     return 0.5*(pow(tan(alfa)*s[1]*s[2], 2) + pow(s[3]/cos(alfa),2)) + g*s[1]*sin(alfa)*(1-cos(s[0]));
+// }
 
 void rk4_vec ( double t , double dt , int n , double *s ,
     void (* f )( double , double * , double *) ){
-    # define M 4
-    static double k1[M], k2 [M], k3[M], k4[M], w[M];
-    int i ;
-    for(i=0; i<n; i++)
-        w[i] = s[i];
-    f (t ,w , k1 );
-    for(i=0; i<n; i++) 
-        w[i]= s[i]+ dt/2 * k1[i];
-    f (t + dt/2, w, k2);
-    for(i=0; i<n; i++) 
-        w[i] = s[i] + dt/2 * k2[i];
-    f (t + dt/2, w, k3);
-    for(i=0; i<n; i++) 
-        w [i] = s[i] + dt * k3[i];
-    f (t + dt, w, k4);
-    for(i=0; i<n; i++) 
-        s[i] = s[i] + dt/6 * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
-
+        # define M 6
+        static double k1[M], k2 [M], k3[M], k4[M], w[M];
+        int i ;
+        for(i=0; i<n; i++)
+            w[i] = s[i];
+        f (t ,w , k1 );
+        for(i=0; i<n; i++) 
+            w[i]= s[i]+ dt/2 * k1[i];
+        f (t + dt/2, w, k2);
+        for(i=0; i<n; i++) 
+            w[i] = s[i] + dt/2 * k2[i];
+        f (t + dt/2, w, k3);
+        for(i=0; i<n; i++) 
+            w [i] = s[i] + dt * k3[i];
+        f (t + dt, w, k4);
+        for(i=0; i<n; i++) 
+            s[i] = s[i] + dt/6 * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
 }
 
 void zapisz(double t, double* s, std::ofstream * out){
 
-    *out << t << " " << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << " " << E(s) << std::endl;
+    *out << t << " " << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << " " << s[4] << " " << s[5] << std::endl;
 }
 
 
