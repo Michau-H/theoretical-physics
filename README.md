@@ -1,15 +1,13 @@
-# *all projects are currently either in progress or not started yet*.  
+# Numerical Methods in Theoretical Physics (C++)
 
-# Numerical Methods with RK4 (C++)
-
-This repository contains numerical simulations solved using the **Runge-Kutta 4th Order (RK4)** method in **C++**, covering various physical systems.
+This repository contains numerical simulations solved using the **Runge-Kutta 4th Order (RK4)** and **Relaxation** method in **C++**, covering various physical systems.
 
 
 ---
 
 ## 🧠 Methodology
 
-All projects use the **RK4** method for solving ordinary differential equations with high accuracy.
+Projects use the **RK4** method for solving ordinary differential equations and **Relaxation** method for modeling the electric and magnetic field.
 
 ---
 
