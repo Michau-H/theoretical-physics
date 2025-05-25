@@ -19,21 +19,25 @@ void rk4_vec(double, double, int, double *,
 void zapisz(double, double *, std::ofstream * out);
 
 int main (){
-    double war[2][4]={{1.1,1.0,0.0}, {M_PI/99,10,0,0}};
-    double dt[2]={0.1,0.01};
+    double war[4][6]={  {1.5, 1.25*M_PI, 0, 0, q*B*pow(1.5,2)/2, 0},
+                        {1.0, 0, 0, 0, -q*B*pow(1.0,2)/2, 0},
+                        {2.0, 0, 0, 0, -q*B*pow(2,2)/2, 0},
+                        {2, 0, 0, 2, -q*B*pow(2,2)/2, 0}};
     double * s ;
-    int n =4;
-    double N[2] ={500,5000};
+    int n =6;
+    double wc = q*B/m;
+    double N = 5000;
+    double dt = 5*2*M_PI/(wc*N);
     void (* f )( double , double * , double *); // wskaźnik do funkcji
 
     f = pochodne ; // wskaźnik do funkcji
     s =( double *) malloc ( n * sizeof ( double )); // tablica rozwiązań
     
-    for(int k=0; k<2; k++){
-        std::string name = {"lab2_stozek"};
+    for(int k=0; k<4; k++){
+        std::string name = {"lab3_pole"};
         name += ("_" + std::to_string(k) + ".txt");
         // sciezka folderu do zapisania
-        std::string folder = "/Users/michau/Documents/fizyka-teoretyczna/lab2_stozek/wyniki/";
+        std::string folder = "/Users/michau/Documents/fizyka-teoretyczna/lab3_pole_magnetyczne/wyniki/";
         std::string path = folder + name; 
         std::ofstream outW(path);
         // warunki początkowe :
@@ -42,11 +46,13 @@ int main (){
         s [1]=war[k][1];
         s [2]=war[k][2];
         s [3]=war[k][3];
+        s [4]=war[k][4];
+        s [5]=war[k][5];
         zapisz(0, s, &outW);
         // symulacja w czasie :
-        for (int i=0; i<N[k]; i++){
-            rk4_vec (t , dt[k] , n , s , f );
-            t = t + dt[k] ;
+        for (int i=0; i<N; i++){
+            rk4_vec (t , dt , n , s , f );
+            t = t + dt ;
         // zapis wynikow do pliku
             zapisz(t, s, &outW);
         }
@@ -63,15 +69,15 @@ void pochodne ( double t , double *s , double * k ){
     k [0]= s[3]/m;
     k [1]= s[4]/(m*pow(s[0],2)) - q*B/(2*m);
     k [2]= s[5]/m;
-    k [3]= pow(s[4],2)/(m*s[3])-pow(q*B,2)*s[0]/(4*m);
+    k [3]= pow(s[4],2)/(m*pow(s[0],3))-pow(q*B,2)*s[0]/(4*m);
     k [4]= 0;
     k [5]= 0;
     return ;
     }
 
-// double E(double *s){
-//     return 0.5*(pow(tan(alfa)*s[1]*s[2], 2) + pow(s[3]/cos(alfa),2)) + g*s[1]*sin(alfa)*(1-cos(s[0]));
-// }
+double E(double *s){
+    return 0.5/m*(pow(s[3],2)+pow(s[4]/s[0],2)+pow(s[5],2)) - q*B*0.5/m*s[4] + pow(q*B*s[0],2)/(8*m);
+}
 
 void rk4_vec ( double t , double dt , int n , double *s ,
     void (* f )( double , double * , double *) ){
@@ -96,7 +102,7 @@ void rk4_vec ( double t , double dt , int n , double *s ,
 
 void zapisz(double t, double* s, std::ofstream * out){
 
-    *out << t << " " << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << " " << s[4] << " " << s[5] << std::endl;
+    *out << t << " " << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << " " << s[4] << " " << s[5] <<  " " << E(s) << std::endl;
 }
 
 
