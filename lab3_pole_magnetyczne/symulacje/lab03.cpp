@@ -19,10 +19,11 @@ void rk4_vec(double, double, int, double *,
 void zapisz(double, double *, std::ofstream * out);
 
 int main (){
-    double war[4][6]={  {1.5, 1.25*M_PI, 0, 0, q*B*pow(1.5,2)/2, 0},
+    double war[5][6]={  {1.5, 1.25*M_PI, 0, 0, q*B*pow(1.5,2)/2, 0},
                         {1.0, 0, 0, 0, -q*B*pow(1.0,2)/2, 0},
                         {2.0, 0, 0, 0, -q*B*pow(2,2)/2, 0},
-                        {2, 0, 0, 2, -q*B*pow(2,2)/2, 0}};
+                        {2, 0, 0, 2, -q*B*pow(2,2)/2, 0},
+                        {2, 0, 0, 2, -q*B*pow(2,2)/2, 1}};
     double * s ;
     int n =6;
     double wc = q*B/m;
@@ -33,7 +34,7 @@ int main (){
     f = pochodne ; // wskaźnik do funkcji
     s =( double *) malloc ( n * sizeof ( double )); // tablica rozwiązań
     
-    for(int k=0; k<4; k++){
+    for(int k=0; k<5; k++){
         std::string name = {"lab3_pole"};
         name += ("_" + std::to_string(k) + ".txt");
         // sciezka folderu do zapisania
